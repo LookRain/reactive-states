@@ -1,30 +1,62 @@
-# New Project
+## API
 
-> ✨ Bootstrapped with Create Snowpack App (CSA).
+### `createStore`
 
-## Available Scripts
+create an observable state
 
-### npm start
+```ts
+import {createStore} from 'reactive-states';
 
-Runs the app in the development mode.
-Open http://localhost:8080 to view it in the browser.
+const form = createStore({
+  name: 'old',
+  age: 1,
+});
+```
 
-The page will reload if you make edits.
-You will also see any lint errors in the console.
 
-### npm test
+### `useReactor`
 
-Launches the test runner in the interactive watch mode.
-See the section about running tests for more information.
+hook that takes in a observable state object, makes the component that uses this hook reactive. If any of the properties of the store is accessed by this compoennt, it will re-render when the property is changed.
 
-### npm run build
+```tsx
+import {useReactor} from 'reactive-states';
 
-Builds the app for production to the `build/` folder.
-It correctly bundles React in production mode and optimizes the build for the best performance.
+function UsinguseReactor() {
+  useReactor(form);
+  const ageDoubled = form.age * 2;
+  const {age} = form;
+  return (
+    <div>
+      Set Name<input onChange={setName} />
+      name: {form.name}
+      <br />
+      <button onClick={increAge}>Age += 1</button>
+      age: {age}
+      ageDoubled: {ageDoubled}
+    </div>
+  );
+}
+```
 
-The build is minified and the filenames include the hashes.
-Your app is ready to be deployed!
 
-### Q: What about Eject?
+### `<Observer />`
 
-No eject needed! Snowpack guarantees zero lock-in, and CSA strives for the same.
+Similar to `useReactor`, it should be used to wrap around a `store.property` accessor.
+Note: When using this approach, you can't do data destructuring or derived componented values.
+
+```tsx
+import {Observer} from 'reactive-states';
+
+function UsingObserver() {
+  return (
+    <div>
+      Set Name<input onChange={setName} />
+      name: <Observer>{() => form.name}</Observer>
+      <br />
+      <button onClick={increAge}>Age += 1</button>
+      age: <Observer>{() => form.age}</Observer>
+    </div>
+  );
+}
+
+```
