@@ -1,64 +1,101 @@
 import * as React from 'react';
 
 import './App.css';
-import {createStore, watcher, Observer, useReactive} from './reactive-states';
 
-const form = createStore({
-  name: 'old',
-  age: 1,
+
+import {reactive, useWatcher, useReactor, Observer} from './reactive-states';
+
+const store = reactive({
+  name: 'ali',
+  age: 31,
+  edu: {
+    school: 'nus',
+    year: 1,
+  },
 });
 
 function increAge() {
-  form.age += 1;
+  store.age++;
+}
+function changeSchool() {
+  store.edu.school = 'zxcvzxcv';
+}
+function incrementYear() {
+  store.edu.year++;
 }
 
-function setName(e: React.ChangeEvent<HTMLInputElement>) {
-  form.name = e.target.value;
-}
-function UsingUseReactive() {
-  useReactive(form);
+function DemouseReactor() {
+  const ageDoubled = store.age * 2;
+
+  useReactor(store);
+
   return (
     <div>
-      Set Name<input onChange={setName} />
-      name: {form.name}
-      <br />
-      <button onClick={increAge}>Age += 1</button>
-      age: {form.age}
+      <button onClick={increAge}>increment age</button>
+      <button
+        onClick={() => {
+          store.age--;
+        }}
+      >
+        decrement age
+      </button>
+      <button onClick={incrementYear}>increment year</button>
+      <p>name: {store.name}</p>
+      <p>age: {store.age}</p>
+      <p>school: {store.edu.school}</p>
+      <p>year: {store.edu.year}</p>
+      <p>age double: {ageDoubled}</p>
     </div>
   );
 }
 
-function UsingObserver() {
+function DemoObserver() {
+  useWatcher(() => {
+    console.log('age change', store.age);
+    if (store.age > 40) {
+      store.name = store.name.includes('old')
+        ? store.name
+        : `old ${store.name}`;
+      store.senior = true;
+    }
+  });
+  useWatcher(() => {
+    console.log('name change', store.name);
+  });
   return (
     <div>
-      Set Name<input onChange={setName} />
-      name: <Observer>{() => form.name}</Observer>
-      <br />
-      <button onClick={increAge}>Age += 1</button>
-      age: <Observer>{() => form.age}</Observer>
+      <button onClick={increAge}>increment age</button>
+      <button
+        onClick={() => {
+          store.age--;
+        }}
+      >
+        decrement age
+      </button>
+      <button onClick={incrementYear}>increment year</button>
+      <p>
+        name: <Observer>{() => store.name}</Observer>
+      </p>
+      <p>
+        age:<Observer>{() => store.age}</Observer>
+      </p>
+      <p>school: {store.edu.school}</p>
+      <p>
+        year: <Observer>{() => store.edu.year}</Observer>
+      </p>
+      <p>
+        senior: <Observer>{() => (store.senior ? 'yes' : 'no')}</Observer>
+      </p>
+      {/* <p>age double: {ageDoubled}</p> */}
     </div>
   );
 }
-
-
-
 function App() {
   return (
-    <div className={'App'}>
-      <h1>with `useReactive`</h1>
-      <p>
-        use the `useReactive` hook. causes the entire component to re-render
-      </p>
-      <UsingUseReactive />
+    <div>
+      <DemouseReactor />
       <hr />
-      <h1>{'with `<Observer />`'}</h1>
-      <p>
-        use the `Observer` component to wrap around the components that
-        substribe the the changes from data. will only re-render the wrapped
-        around data
-      </p>
-      <UsingObserver />
-
+      <DemoObserver />
     </div>
   );
 }
