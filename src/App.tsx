@@ -120,7 +120,7 @@ function FlagControlled() {
       >
         toggle
       </button>
-      {flag && <DemoObserver />}
+      {flag && <DemoReactor />}
     </>
   );
 }
