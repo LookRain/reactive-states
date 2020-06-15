@@ -8,7 +8,7 @@ import {store, increAge, incrementYear, updateAgeWithRemote} from './store';
 const btnBlue =
   'bg-blue-500 hover:bg-blue-700 text-white font-bold mx-5 my-2 py-2 px-4 rounded';
 const card =
-  'max-w-sm rounded overflow-hidden mx-5 my-5 p-4 shadow-lg flex flex-col';
+  'max-w-sm rounded overflow-hidden p-4 shadow-lg flex flex-col mx-auto my-4';
 
 function DemoReactor() {
   const ageDoubled = store.age * 2;
@@ -112,8 +112,9 @@ function DemoObserver() {
 function FlagControlled() {
   const [flag, setFlag] = React.useState(true);
   return (
-    <>
+    <div className="m-auto">
       <button
+        className={btnBlue}
         onClick={() => {
           setFlag((a) => !a);
         }}
@@ -121,13 +122,13 @@ function FlagControlled() {
         toggle
       </button>
       {flag && <DemoReactor />}
-    </>
+    </div>
   );
 }
 
 function App() {
   return (
-    <div>
+    <div className="flex flex-col text-center ">
       <DemoReactor />
       <hr />
       <DemoObserver />
