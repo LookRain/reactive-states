@@ -17,6 +17,8 @@
     "typescript": "^3.8.0"
   },
   "dependencies": {
+    "postcss-cli": "^7.1.1",
+    "tailwindcss": "^1.4.6",
     "vue": "3.0.0-beta.14"
   }
 }

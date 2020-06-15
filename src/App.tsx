@@ -2,7 +2,6 @@ import * as React from 'react';
 
 import './App.css';
 
-
 import {reactive, useWatcher, useReactor, Observer} from './reactive-states';
 
 const store = reactive({
@@ -24,22 +23,31 @@ function incrementYear() {
   store.edu.year++;
 }
 
-function DemouseReactor() {
+const btnBlue =
+  'bg-blue-500 hover:bg-blue-700 text-white font-bold mx-5 my-2 py-2 px-4 rounded';
+const card = 'max-w-sm rounded overflow-hidden mx-5 my-5 p-4 shadow-lg flex flex-col';
+
+function DemoReactor() {
   const ageDoubled = store.age * 2;
 
   useReactor(store);
 
   return (
-    <div>
-      <button onClick={increAge}>increment age</button>
+    <div className={card}>
+      <button className={btnBlue} onClick={increAge}>
+        increment age
+      </button>
       <button
+        className={btnBlue}
         onClick={() => {
           store.age--;
         }}
       >
         decrement age
       </button>
-      <button onClick={incrementYear}>increment year</button>
+      <button className={btnBlue} onClick={incrementYear}>
+        increment year
+      </button>
       <p>name: {store.name}</p>
       <p>age: {store.age}</p>
       <p>school: {store.edu.school}</p>
@@ -63,16 +71,21 @@ function DemoObserver() {
     console.log('name change', store.name);
   });
   return (
-    <div>
-      <button onClick={increAge}>increment age</button>
+    <div className={card}>
+      <button className={btnBlue} onClick={increAge}>
+        increment age
+      </button>
       <button
+        className={btnBlue}
         onClick={() => {
           store.age--;
         }}
       >
         decrement age
       </button>
-      <button onClick={incrementYear}>increment year</button>
+      <button className={btnBlue} onClick={incrementYear}>
+        increment year
+      </button>
       <p>
         name: <Observer>{() => store.name}</Observer>
       </p>
@@ -93,7 +106,7 @@ function DemoObserver() {
 function App() {
   return (
     <div>
-      <DemouseReactor />
+      <DemoReactor />
       <hr />
       <DemoObserver />
     </div>

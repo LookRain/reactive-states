@@ -3,5 +3,8 @@
   "devOptions": {},
   "installOptions": {
     "installTypes": true
+  },
+  "scripts": {
+    "build:css": "postcss"
   }
 }
