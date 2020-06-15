@@ -89,7 +89,7 @@ export function watcher(myFunc: Function) {
   activeFunc();
   activeFunc = null;
 }
-export function unregister(myFunc: Function) {
+export function unwatch(myFunc: Function) {
   return () => {
     activeUnregister = myFunc;
     // execute the function
@@ -106,7 +106,7 @@ export function Observer(props: {children: Function}) {
   }, [children]);
   React.useEffect(() => {
     watcher(effectFn);
-    return unregister(effectFn);
+    return unwatch(effectFn);
   }, [children]);
   return <span>{children()}</span>;
 }
