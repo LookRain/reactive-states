@@ -97,7 +97,7 @@ function DemoObserver() {
           )}
         </Observer>
       </p>
-      <p>school: {store.edu.school}</p>
+      <p>school: <Observer>{() => store.edu.school}</Observer></p>
       <p>
         year: <Observer>{() => store.edu.year}</Observer>
       </p>
