@@ -15,6 +15,7 @@ export const store: {
   name: string;
   age: number;
   updateStatus: string;
+  courses: string[];
   edu: {
       school: string;
       year: number;
@@ -24,11 +25,13 @@ export const store: {
   name: 'ali',
   age: 31,
   updateStatus: 'success',
+  courses: ['CS1010', 'MA1100'],
   edu: {
     school: 'nus',
     year: 1,
   },
 });
+window.store=store;
 
 export function increAge() {
   store.age++;
@@ -42,4 +45,9 @@ export async function updateAgeWithRemote() {
   const res = await fetchAge();
   store.updateStatus = 'success';
   store.age = res.age;
+}
+
+export function addCourse() {
+  // store.courses[1] = 'CS'+Math.random().toString().slice(2,6)
+  store.courses = [...store.courses,('CS'+Math.random().toString().slice(2,6))]
 }

@@ -6,6 +6,7 @@ let activeUnregister: (() => any) | null = null;
 let activeEffect: (() => any) | null = null;
 (window as any).targetMap = targetMap;
 
+
 export const isObject = (val: unknown): val is Record<any, any> =>
   val !== null && typeof val === 'object';
 
@@ -49,11 +50,40 @@ function trigger(target: object, key: unknown) {
   }
 }
 
+
+const arrayInstrumentations: Record<string, Function> = {};
+['includes', 'indexOf', 'lastIndexOf'].forEach(key => {
+  console.log('key', key, 'arrayInstrumentations', arrayInstrumentations)
+  arrayInstrumentations[key] = function(...args: any[]): any {
+    const arr = (this) as any
+    for (let i = 0, l = (this as any).length; i < l; i++) {
+      track(arr, i + '')
+    }
+    // we run the method using the original args first (which may be reactive)
+    const res = arr[key](...args)
+    if (res === -1 || res === false) {
+      // if that didn't work, run it again using raw values.
+      return arr[key](...args)
+    } else {
+      return res
+    }
+  }
+})
+
 export function reactive<T extends object>(target: T) {
   const handler = {
     get(target: object, key: string | number | symbol, receiver: any): any {
+      // console.log('getting', key);
+
       let result = Reflect.get(target, key, receiver);
       track(target, key);
+
+      // if (Array.isArray(result)) {
+      //   console.log('is array');
+
+      //   return Reflect.get(arrayInstrumentations, key, receiver)
+      // }
+
       if (isObject(result)) {
         return reactive(result);
       }
@@ -65,6 +95,7 @@ export function reactive<T extends object>(target: T) {
       value: any,
       receiver: any,
     ) {
+      console.log('setting', key)
       let oldValue = (target as any)[key];
 
       let result = Reflect.set(target, key, value, receiver);
@@ -101,14 +132,20 @@ export function Observer(props: {children: Function}) {
   return <span>{children()}</span>;
 }
 
-function recursivelyAccess(obj: Record<string, any>) {
-  const keys = Object.keys(obj);
-  keys.forEach((key) => {
-    obj[key];
-    if (isObject(obj[key])) {
-      recursivelyAccess(obj[key]);
-    }
-  });
+function recursivelyAccess(obj: unknown) {
+  if (Array.isArray(obj)) {
+    obj.forEach(recursivelyAccess);
+    return;
+  }
+  if (isObject(obj)) {
+    const keys = Object.keys(obj);
+    keys.forEach((key) => {
+      obj[key];
+      if (isObject(obj[key])) {
+        recursivelyAccess(obj[key]);
+      }
+    });
+  }
 }
 
 export function useReactor(store: Record<string, any>) {

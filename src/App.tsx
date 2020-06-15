@@ -3,7 +3,7 @@ import * as React from 'react';
 import './App.css';
 
 import {useWatcher, useReactor, Observer} from './reactive-states';
-import {store, increAge, incrementYear, updateAgeWithRemote} from './store';
+import {store, increAge, incrementYear, updateAgeWithRemote, addCourse} from './store';
 
 const btnBlue =
   'bg-blue-500 hover:bg-blue-700 text-white font-bold mx-5 my-2 py-2 px-4 rounded';
@@ -34,6 +34,9 @@ function DemoReactor() {
       <button className={btnBlue} onClick={incrementYear}>
         increment year
       </button>
+      <button className={btnBlue} onClick={addCourse}>
+        add course
+      </button>
       <p>name: {store.name}</p>
       {store.updateStatus === 'loading' ? (
         <span className="lds-dual-ring" />
@@ -43,6 +46,9 @@ function DemoReactor() {
 
       <p>school: {store.edu.school}</p>
       <p>year: {store.edu.year}</p>
+      <p>courses: {store.courses.map(c => <div key={c}>{c}</div>)}</p>
+      {/* {JSON.stringify(store)} */}
+      {/* <p>course 3: {store.courses[2]}</p> */}
       <p>age double: {ageDoubled}</p>
     </div>
   );
@@ -101,6 +107,8 @@ function DemoObserver() {
       <p>
         year: <Observer>{() => store.edu.year}</Observer>
       </p>
+      <p>courses: <Observer>{() => store.courses.map(c => <div key={c}>{c}</div>)}</Observer></p>
+
       <p>
         senior: <Observer>{() => (store.senior ? 'yes' : 'no')}</Observer>
       </p>
