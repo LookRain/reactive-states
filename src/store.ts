@@ -1,4 +1,4 @@
-import {reactive, useWatcher, useReactor, Observer} from './reactive-states';
+import {reactive} from './reactive-states';
 
 export function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -11,7 +11,16 @@ export async function fetchAge() {
   };
 }
 
-export const store = reactive({
+export const store: {
+  name: string;
+  age: number;
+  updateStatus: string;
+  edu: {
+      school: string;
+      year: number;
+  };
+  senior?: boolean;
+} = reactive({
   name: 'ali',
   age: 31,
   updateStatus: 'success',

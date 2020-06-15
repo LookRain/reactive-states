@@ -4,7 +4,7 @@ import * as React from 'react';
 const targetMap = new WeakMap();
 let activeUnregister: (() => any) | null = null;
 let activeEffect: (() => any) | null = null;
-window.targetMap = targetMap;
+(window as any).targetMap = targetMap;
 
 export const isObject = (val: unknown): val is Record<any, any> =>
   val !== null && typeof val === 'object';
