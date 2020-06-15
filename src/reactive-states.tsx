@@ -1,19 +1,21 @@
 import * as React from 'react';
 
 // reactive function code adapted from https://github.com/Code-Pop/vue-3-reactivity
-
 const targetMap = new WeakMap();
 let activeEffect: (() => any) | null = null;
+window.targetMap = targetMap;
 
 export const isObject = (val: unknown): val is Record<any, any> =>
   val !== null && typeof val === 'object';
 
 function effect(eff: () => any) {
+
   activeEffect = eff;
   activeEffect && activeEffect();
   activeEffect = null;
 }
-export const watch = effect;
+
+
 function track(target: object, key: unknown) {
   if (activeEffect) {
     let depsMap = targetMap.get(target);
@@ -71,11 +73,13 @@ export function reactive<T extends object>(target: T) {
 export function Observer(props: {children: Function}) {
   const {children} = props;
   const [, forceUpdate] = React.useState(1);
+  const effectFn = React.useCallback(() => {
+    children();
+    forceUpdate((c) => c + 1);
+  }, [children]);
   React.useEffect(() => {
-    effect(() => {
-      children();
-      forceUpdate((c) => c + 1);
-    });
+
+    effect(effectFn);
   }, [children]);
   return <span>{children()}</span>;
 }
@@ -102,6 +106,7 @@ export function useReactor(store: Record<string, any>) {
   }, []);
 }
 
+export const watch = effect;
 export function useWatcher(fn: () => any) {
   effect(fn);
 }
