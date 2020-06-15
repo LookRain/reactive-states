@@ -106,7 +106,7 @@ export function Observer(props: {children: Function}) {
   }, [children]);
   React.useEffect(() => {
     watcher(effectFn);
-    // return unregister(effectFn);
+    return unregister(effectFn);
   }, [children]);
   return <span>{children()}</span>;
 }
