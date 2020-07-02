@@ -2,13 +2,31 @@ import * as React from 'react';
 
 import './App.css';
 
-import {useWatcher, useReactor, Observer} from './reactive-states';
+import {reactive, effect} from './reactive-states';
+import {useWatcher, useReactor, Observer, }from './connect-reactive'
 import {store, increAge, incrementYear, updateAgeWithRemote, addCourse} from './store';
 
 const btnBlue =
   'bg-blue-500 hover:bg-blue-700 text-white font-bold mx-5 my-2 py-2 px-4 rounded';
 const card =
   'max-w-sm rounded overflow-hidden p-4 shadow-lg flex flex-col mx-auto my-4';
+
+(window as any).reactive = reactive;
+(window as any).effect = effect;
+/***
+ *
+ const student = reactive({
+   name: 'John, Doe',
+   age: 21
+ });
+
+
+ effect(() => {
+   console.log('age changed ', student.age);
+ });
+
+ */
+
 
 function DemoReactor() {
   const ageDoubled = store.age * 2;
@@ -107,7 +125,7 @@ function DemoObserver() {
       <p>
         year: <Observer>{() => store.edu.year}</Observer>
       </p>
-      <p>courses: <Observer>{() => store.courses.map(c => <div key={c}>{c}</div>)}</Observer></p>
+      {/* <p>courses: <Observer>{() => store.courses.map(c => <div key={c}>{c}</div>)}</Observer></p> */}
 
       <p>
         senior: <Observer>{() => (store.senior ? 'yes' : 'no')}</Observer>

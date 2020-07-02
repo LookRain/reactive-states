@@ -31,7 +31,7 @@ export const store: {
     year: 1,
   },
 });
-window.store=store;
+
 
 export function increAge() {
   store.age++;
