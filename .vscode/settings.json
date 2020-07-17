@@ -1,3 +1,4 @@
 {
-  "editor.fontFamily": "Fira Code, JetBrains Mono, Monaco, 'Courier New', monospace"
+  "editor.fontFamily": "Fira Code, JetBrains Mono, Monaco, 'Courier New', monospace",
+  "editor.formatOnSave": true
 }

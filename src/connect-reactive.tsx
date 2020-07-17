@@ -1,9 +1,8 @@
-
 import * as React from 'react';
-import {unwatch, effect, isObject} from './reactive-states';
+import { unwatch, effect, isObject } from './reactive-states';
 
-export function Observer(props: {children: Function}) {
-  const {children} = props;
+export function Observer(props: { children: () => any }) {
+  const { children } = props;
   const [, forceUpdate] = React.useState(1);
 
   const effectFn = React.useCallback(() => {
@@ -40,12 +39,11 @@ export function useReactor(store: Record<string, any>) {
   const [, forceUpdate] = React.useState(1);
   const effectFn = React.useCallback(() => {
     recursivelyAccess(store);
-      forceUpdate((c) => c + 1);
+    forceUpdate((c) => c + 1);
   }, []);
   React.useEffect(() => {
     effect(effectFn);
     return unwatch(effectFn);
-
   }, []);
 }
 
@@ -53,6 +51,6 @@ export const watch = effect;
 export function useWatcher(fn: () => any) {
   React.useEffect(() => {
     effect(fn);
-    return unwatch(fn)
+    return unwatch(fn);
   }, [fn]);
 }

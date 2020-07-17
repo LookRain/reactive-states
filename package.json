@@ -1,25 +1,38 @@
 {
+  "name": "reactivia",
+  "version": "0.0.1",
+  "main": "index.js",
+  "author": "Lu Yu",
+  "license": "MIT",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
   "scripts": {
-    "prepare": "snowpack",
-    "start": "snowpack dev",
-    "build": "snowpack build",
-    "test": "jest"
+    "build": "tsc --declaration true",
+    "lint": "eslint './src/**/*.{ts,tsx}'",
+    "lint:fix": "eslint './src/**/*.{ts,tsx}' --fix --rule react-hooks/exhaustive-deps:off && tsc -p 'tsconfig.json' --noEmit --pretty",
+    "lint:only": "eslint './src/**/*.{ts,tsx}' --fix --rule react-hooks/exhaustive-deps:off",
+    "release": "yarn build && npm publish"
   },
-  "webDependencies": {},
+  "peerDependencies": {
+    "react": "^16.9.0"
+  },
   "devDependencies": {
-    "@snowpack/app-scripts-react": "^0.4.0",
-    "@testing-library/jest-dom": "^5.5.0",
-    "@testing-library/react": "^10.0.3",
-    "jest": "^25.4.0",
-    "react": "^16.13.0",
-    "react-dom": "^16.13.0",
-    "snowpack": "^2.0.0-0",
-    "typescript": "^3.8.0"
-  },
-  "dependencies": {
-    "@vue/reactivity": "^3.0.0-beta.15",
-    "postcss-cli": "^7.1.1",
-    "tailwindcss": "^1.4.6",
-    "vue": "3.0.0-beta.14"
+    "@babel/cli": "^7.7.0",
+    "@babel/core": "^7.7.2",
+    "@babel/plugin-proposal-object-rest-spread": "^7.6.2",
+    "@babel/preset-env": "^7.7.1",
+    "@babel/preset-typescript": "^7.7.2",
+    "@types/react": "^16.9.43",
+    "@typescript-eslint/eslint-plugin": "^3.6.1",
+    "@typescript-eslint/parser": "^3.6.1",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react": "^7.20.3",
+    "eslint-plugin-react-hooks": "^4.0.8",
+    "prettier": "^2.0.5",
+    "react": "^16.13.1",
+    "typescript": "^3.9.7"
   }
 }

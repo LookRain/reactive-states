@@ -1,5 +1,5 @@
 export const isObject = (val: unknown): val is Record<any, any> =>
-val !== null && typeof val === 'object';
+  val !== null && typeof val === 'object';
 
 let activeUnregister: (() => any) | null = null;
 
@@ -12,13 +12,10 @@ export function unwatch(myFunc: () => any) {
   };
 }
 
-
 const targetMap = new WeakMap();
-
 
 let activeEffect: (() => any) | null = null;
 (window as any).targetMap = targetMap;
-
 
 export function effect(eff: () => any) {
   activeEffect = eff;
@@ -30,10 +27,10 @@ export function effect(eff: () => any) {
  *
   Adds the target object to targetMap, adds the ineterested key to its depsMap, adds the active effect to its deps Set
  */
-function track(target: object, key: unknown) {
+function track(target: Record<string, unknown>, key: unknown) {
   if (activeUnregister) {
-    let depsMap = targetMap.get(target);
-    let dep = depsMap.get(key);
+    const depsMap = targetMap.get(target);
+    const dep = depsMap.get(key);
     if (dep.has(activeUnregister)) {
       dep.delete(activeUnregister);
     }
@@ -52,12 +49,12 @@ function track(target: object, key: unknown) {
   }
 }
 
-function trigger(target: object, key: unknown) {
+function trigger(target: Record<string, unknown>, key: unknown) {
   const depsMap = targetMap.get(target);
   if (!depsMap) {
     return;
   }
-  let dep = depsMap.get(key);
+  const dep = depsMap.get(key);
   if (dep) {
     dep.forEach((eff: () => void) => {
       eff();
@@ -65,11 +62,14 @@ function trigger(target: object, key: unknown) {
   }
 }
 
-
-export function reactive<T extends object>(target: T) {
+export function reactive<T extends Record<string, unknown>>(target: T) {
   const handler = {
-    get(target: object, key: string | number | symbol, receiver: any): any {
-      let result = Reflect.get(target, key, receiver);
+    get(
+      target: Record<string, unknown>,
+      key: string | number | symbol,
+      receiver: any
+    ): any {
+      const result = Reflect.get(target, key, receiver);
       track(target, key);
 
       if (isObject(result)) {
@@ -78,21 +78,19 @@ export function reactive<T extends object>(target: T) {
       return result;
     },
     set(
-      target: object,
+      target: Record<string, unknown>,
       key: string | number | symbol,
       value: any,
-      receiver: any,
+      receiver: any
     ) {
-      let oldValue = (target as any)[key];
+      const oldValue = (target as any)[key];
 
-      let result = Reflect.set(target, key, value, receiver);
+      const result = Reflect.set(target, key, value, receiver);
       if (oldValue != value) {
         trigger(target, key); // If this reactive property (target) has effects to rerun on SET, trigger them.
       }
       return result;
     },
   };
-  return new Proxy(target, handler) as T;
+  return new Proxy(target, handler as any) as T;
 }
-
-
