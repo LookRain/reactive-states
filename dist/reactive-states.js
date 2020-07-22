@@ -17,9 +17,9 @@ export function effect(eff) {
 }
 function track(target, key) {
     if (activeUnregister) {
-        const depsMap = targetMap.get(target);
-        const dep = depsMap.get(key);
-        if (dep.has(activeUnregister)) {
+        const depsMap = targetMap === null || targetMap === void 0 ? void 0 : targetMap.get(target);
+        const dep = depsMap === null || depsMap === void 0 ? void 0 : depsMap.get(key);
+        if (dep === null || dep === void 0 ? void 0 : dep.has(activeUnregister)) {
             dep.delete(activeUnregister);
         }
         return;
@@ -59,11 +59,8 @@ export function reactive(target) {
             return result;
         },
         set(target, key, value, receiver) {
-            const oldValue = target[key];
             const result = Reflect.set(target, key, value, receiver);
-            if (oldValue != value) {
-                trigger(target, key);
-            }
+            trigger(target, key);
             return result;
         },
     };

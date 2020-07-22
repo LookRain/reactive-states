@@ -20,6 +20,7 @@ export function Observer(props: { children: () => any }) {
 
 function recursivelyAccess(obj: unknown) {
   if (Array.isArray(obj)) {
+    obj.length;
     obj.forEach(recursivelyAccess);
     return;
   }

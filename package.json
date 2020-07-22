@@ -1,17 +1,18 @@
 {
   "name": "reactivia",
-  "version": "0.0.1",
-  "main": "index.js",
+  "version": "0.0.2",
   "author": "Lu Yu",
   "license": "MIT",
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
   },
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc --declaration true",
     "lint": "eslint './src/**/*.{ts,tsx}'",
-    "lint:fix": "eslint './src/**/*.{ts,tsx}' --fix --rule react-hooks/exhaustive-deps:off && tsc -p 'tsconfig.json' --noEmit --pretty",
-    "lint:only": "eslint './src/**/*.{ts,tsx}' --fix --rule react-hooks/exhaustive-deps:off",
+    "lint:fix": "eslint './src/**/*.{ts,tsx}' --fix && tsc --noEmit --pretty",
     "release": "yarn build && npm publish"
   },
   "peerDependencies": {

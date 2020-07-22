@@ -37,6 +37,7 @@ module.exports = {
     '@typescript-eslint/member-ordering': ['error'],
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-inferrable-types': 'off',
+    'react/jsx-no-bind': 'off',
     '@typescript-eslint/no-unused-vars': [
       'error',
       {

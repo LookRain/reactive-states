@@ -29,9 +29,9 @@ export function effect(eff: () => any) {
  */
 function track(target: Record<string, unknown>, key: unknown) {
   if (activeUnregister) {
-    const depsMap = targetMap.get(target);
-    const dep = depsMap.get(key);
-    if (dep.has(activeUnregister)) {
+    const depsMap = targetMap?.get(target);
+    const dep = depsMap?.get(key);
+    if (dep?.has(activeUnregister)) {
       dep.delete(activeUnregister);
     }
     return;
@@ -62,6 +62,8 @@ function trigger(target: Record<string, unknown>, key: unknown) {
   }
 }
 
+// const ARRAY_KEYS = ['length',]
+
 export function reactive<T extends Record<string, unknown>>(target: T) {
   const handler = {
     get(
@@ -83,12 +85,12 @@ export function reactive<T extends Record<string, unknown>>(target: T) {
       value: any,
       receiver: any
     ) {
-      const oldValue = (target as any)[key];
+      // const oldValue = (target as any)[key];
 
       const result = Reflect.set(target, key, value, receiver);
-      if (oldValue != value) {
-        trigger(target, key); // If this reactive property (target) has effects to rerun on SET, trigger them.
-      }
+      // if (oldValue !== value || key === 'length') {
+      trigger(target, key); // If this reactive property (target) has effects to rerun on SET, trigger them.
+      // }
       return result;
     },
   };

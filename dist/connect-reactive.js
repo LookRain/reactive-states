@@ -15,6 +15,7 @@ export function Observer(props) {
 }
 function recursivelyAccess(obj) {
     if (Array.isArray(obj)) {
+        obj.length;
         obj.forEach(recursivelyAccess);
         return;
     }
